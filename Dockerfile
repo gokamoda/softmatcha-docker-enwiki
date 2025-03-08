@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 # Add the UV binary to the image
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
@@ -15,6 +15,7 @@ git \
 python3 \
 pkg-config \
 python3-icu \
+libtbb-dev \
 libicu-dev && \
 rm -rf /var/lib/apt/lists/*
 
