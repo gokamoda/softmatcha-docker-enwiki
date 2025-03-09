@@ -22,8 +22,7 @@ RUN df -h
 RUN uname
 RUN uname -m 
 
-# RUN useradd -m -s /bin/bash user
-# USER user
+USER ubuntu
 
 WORKDIR /app
 
@@ -31,16 +30,11 @@ WORKDIR /app
 RUN uv python install 3.11
 RUN uv python pin 3.11
 
-COPY ./scripts /app/scripts
-COPY ./src /app/src
-COPY ./static /app/static
-COPY ./templates /app/templates
-COPY ./pyproject.toml /app/pyproject.toml
-# COPY --chown=user ./scripts /app/scripts
-# COPY --chown=user ./src /app/src
-# COPY --chown=user ./static /app/static
-# COPY --chown=user ./templates /app/templates
-# COPY --chown=user ./pyproject.toml /app/pyproject.toml
+COPY --chown=ubuntu ./scripts /app/scripts
+COPY --chown=ubuntu ./src /app/src
+COPY --chown=ubuntu ./static /app/static
+COPY --chown=ubuntu ./templates /app/templates
+COPY --chown=ubuntu ./pyproject.toml /app/pyproject.toml
 
 RUN bash scripts/0_setup_cpu.sh
 RUN bash scripts/1_prep.sh
