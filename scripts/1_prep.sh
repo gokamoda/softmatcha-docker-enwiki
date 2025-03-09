@@ -16,8 +16,8 @@ source .venv/bin/activate
 
 
 # English Wikitext, 0.1B, glove-wiki-gigaword-300
- python src/download_corpora.py --dataset-name wikitext-103-raw-v1-train
- python src/indexing.py \
+python src/download_corpora.py --dataset-name wikitext-103-raw-v1-train
+python src/indexing.py \
     --backend gensim \
     --model glove-wiki-gigaword-300 \
     --index corpora/glove-wiki-gigaword-300_wikitext-103-raw-v1-train.h5 \
