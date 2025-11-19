@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 
 function SearchResults({ searchParams }) {
@@ -11,17 +11,7 @@ function SearchResults({ searchParams }) {
   const [hasMore, setHasMore] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  useEffect(() => {
-    if (searchParams.query) {
-      // Reset state for new search
-      setResults([]);
-      setTokenEnd(0);
-      setError(null);
-      performSearch(0, false);
-    }
-  }, [searchParams]);
-
-  const performSearch = async (start, isLoadMore = false) => {
+  const performSearch = useCallback(async (start, isLoadMore = false) => {
     if (isLoadMore) {
       setIsLoadingMore(true);
     } else {
@@ -62,7 +52,17 @@ function SearchResults({ searchParams }) {
       setLoading(false);
       setIsLoadingMore(false);
     }
-  };
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (searchParams.query) {
+      // Reset state for new search
+      setResults([]);
+      setTokenEnd(0);
+      setError(null);
+      performSearch(0, false);
+    }
+  }, [searchParams, performSearch]);
 
   const handleLoadMore = () => {
     performSearch(tokenEnd, true);

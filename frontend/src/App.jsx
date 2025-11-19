@@ -1,31 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Header from './components/Header';
 import ExamplesSection from './components/ExamplesSection';
 import SearchResults from './components/SearchResults';
 import './index.css';
 
 function App() {
-  const [searchParams, setSearchParams] = useState({
-    query: '',
-    threshold: 0.5,
-    corpusModel: 'wikitext103 (0.1B) | glove-wiki-gigaword-300',
+  const [searchParams, setSearchParams] = useState(() => {
+    // Initialize from URL on mount
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('query') || '';
+    const threshold = parseFloat(urlParams.get('threshold')) || 0.5;
+    const corpusModel = urlParams.get('corpus_model') || 'wikitext103 (0.1B) | glove-wiki-gigaword-300';
+    
+    return { query, threshold, corpusModel };
   });
 
   const corpusModelOptions = [
     'wikitext103 (0.1B) | glove-wiki-gigaword-300',
   ];
-
-  // Parse URL parameters on mount
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get('query') || '';
-    const threshold = parseFloat(urlParams.get('threshold')) || 0.5;
-    const corpusModel = urlParams.get('corpus_model') || 'wikitext103 (0.1B) | glove-wiki-gigaword-300';
-
-    if (query) {
-      setSearchParams({ query, threshold, corpusModel });
-    }
-  }, []);
 
   const handleSearch = (params) => {
     setSearchParams(params);
