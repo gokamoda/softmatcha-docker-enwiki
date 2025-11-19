@@ -1,9 +1,10 @@
 import json
+import os
 from argparse import Namespace
 
 import psutil
 from fastapi import Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 
 from config import SoftMatchaAPI, get_model_tokenizers
 from mylogger import init_logging
@@ -40,16 +41,8 @@ def index(
     query: str = "",
     corpus_model="wikitext103 (0.1B) | glove-wiki-gigaword-300",
 ):
-    return app.templates.TemplateResponse(
-        "top.html",
-        {
-            "request": request,
-            "threshold": threshold,
-            "query": query,
-            "corpus_model": corpus_model,
-            "corpus_model_options": app.corpus_model_options,
-        },
-    )
+    # Serve the React app
+    return FileResponse("static/dist/index.html")
 
 
 @app.get("/search", response_class=JSONResponse)

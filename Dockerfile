@@ -18,6 +18,11 @@ libtbb-dev \
 libicu-dev && \
 rm -rf /var/lib/apt/lists/*
 
+# Install Node.js (using NodeSource repository for latest LTS)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+apt-get install -y nodejs && \
+rm -rf /var/lib/apt/lists/*
+
 RUN df -h
 RUN uname
 RUN uname -m 
@@ -32,9 +37,12 @@ RUN uv python pin 3.11
 
 COPY --chown=ubuntu ./scripts /app/scripts
 COPY --chown=ubuntu ./src /app/src
-COPY --chown=ubuntu ./static /app/static
+COPY --chown=ubuntu ./frontend /app/frontend
 COPY --chown=ubuntu ./templates /app/templates
 COPY --chown=ubuntu ./pyproject.toml /app/pyproject.toml
+
+# Build React frontend
+RUN cd frontend && npm install && npm run build
 
 RUN bash scripts/0_setup_cpu.sh
 RUN bash scripts/1_prep.sh

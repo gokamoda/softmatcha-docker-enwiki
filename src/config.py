@@ -41,8 +41,9 @@ class SoftMatchaAPI(FastAPI):
 
         # Add the templates directory
         self.templates = Jinja2Templates(directory="templates")
-        # Add the static directory
-        self.mount("/static", StaticFiles(directory="static"), name="static")
+        # Add the static directory for React build assets
+        self.mount("/assets", StaticFiles(directory="static/dist/assets"), name="assets")
+        self.mount("/images", StaticFiles(directory="static/dist/images"), name="images")
         self.corpus_model_options = self.get_corpus_model_options()
         self.corpus_model_combinations = self.get_corpus_model_combinations()
         self.corpus_options = self.get_corpus_options()
