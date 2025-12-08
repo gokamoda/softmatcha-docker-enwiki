@@ -18,6 +18,11 @@ libtbb-dev \
 libicu-dev && \
 rm -rf /var/lib/apt/lists/*
 
+# Install Node.js (using NodeSource repository for latest LTS)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+apt-get install -y nodejs && \
+rm -rf /var/lib/apt/lists/*
+
 RUN df -h
 RUN uname
 RUN uname -m 
@@ -31,11 +36,16 @@ RUN uv python install 3.11
 RUN uv python pin 3.11
 
 COPY --chown=ubuntu ./scripts /app/scripts
-COPY --chown=ubuntu ./src /app/src
-COPY --chown=ubuntu ./static /app/static
-COPY --chown=ubuntu ./templates /app/templates
 COPY --chown=ubuntu ./pyproject.toml /app/pyproject.toml
-
 RUN bash scripts/0_setup_cpu.sh
+RUN .venv/bin/python -c "import gensim.downloader as api; api.load('glove-wiki-gigaword-300')"
+
+COPY --chown=ubuntu ./src /app/src
 RUN bash scripts/1_prep.sh
+
+# Build React frontend
+COPY --chown=ubuntu ./frontend /app/frontend
+RUN cd frontend && npm install && npm run build
+
+
 # CMD [".venv/bin/python", "src/run_demo.py"]
