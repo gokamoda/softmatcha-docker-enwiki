@@ -22,8 +22,9 @@ function Header({ onSearch, corpusModelOptions }) {
     <header>
       <nav
         id="header"
-        className="navbar navbar-expand-md navbar-light bg-light shadow-sm fixed-top"
-        style={{ backgroundColor: '#b6c072 !important' }}
+        className="navbar navbar-expand-md navbar-light shadow-sm fixed-top"
+        style={{ backgroundColor: '#b6c072'
+         }}
       >
         <div className="container px-0">
           <div className="row justify-content-between align-items-center">
